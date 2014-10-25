@@ -70,6 +70,7 @@ Set ``namespace`` and ``endpoint`` by passing them as keyword arguments...
 ...     namespace = '{http://mynamspace/}'
 >>> cp = CustomConceptpower()
 >>> cp.search('Bradshaw')
+```
 
 License
 -------
