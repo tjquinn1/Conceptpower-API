@@ -3,6 +3,8 @@ Conceptpower API
 A very simple library for querying a [Conceptpower](http://conceptpower.sourceforge.net/)
 REST API.
 
+Cite as: [![DOI](https://zenodo.org/badge/5124/erickpeirson/Conceptpower-API.png)](http://dx.doi.org/10.5281/zenodo.12395)
+
 Installation
 ------------
 The ``conceptpower-api`` package is [available via PyPI](https://pypi.python.org/pypi?name=conceptpower-api&version=1.0&:action=display). 
