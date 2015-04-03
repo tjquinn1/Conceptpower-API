@@ -80,9 +80,16 @@ class Conceptpower:
         url = "{0}ConceptLookup/{1}/{2}".format(self.endpoint, query, pos)
         root = ET.fromstring(requests.get(url).content)
         conceptEntries = root.findall("{0}conceptEntry".format(self.namespace))
-        results = [{ node.tag.replace(self.namespace, ''): node.text
-                        for node in conceptEntry }
-                            for conceptEntry in conceptEntries ]
+        
+        results = []
+        for conceptEntry in conceptEntries:
+            datum = {}
+            for node in conceptEntry:
+                datum[node.tag.replace(self.namespace, '')] = node.text
+                if node.tag == '{0}type'.format(self.namespace):
+                    datum['type_id'] = node.get('type_id')
+                    datum['type_uri'] = node.get('type_uri')                
+            results.append(datum)
         return results
 
     def get (self, uri):
@@ -123,3 +130,31 @@ class Conceptpower:
                 data['type_id'] = snode.get('type_id')
                 data['type_uri'] = snode.get('type_uri')
         return data
+        
+    def get_type(self, uri):
+        """
+        Retrieve information (by ID or URI) about a type.
+        
+        Parameters
+        ----------
+        uri : str
+            The full Conceptpower URI, or an ID, as string. For example: 
+            http://www.digitalhps.org/types/TYPE_986a7cc9-c0c1-4720-b344-853f08c136ab
+            
+        Returns
+        -------
+        data : dict
+        """
+        
+        url = "{0}Type?id={1}".format(self.endpoint, uri)
+        root = ET.fromstring(requests.get(url).content)
+        conceptEntry = root.findall("{0}type_entry".format(self.namespace))[0]
+        data = {}
+
+        for snode in conceptEntry:
+            data[snode.tag.replace(self.namespace, '')] = snode.text
+            if snode.tag == '{0}supertype'.format(self.namespace):
+                data['supertype_id'] = snode.get('supertype_id')
+                data['supertype_uri'] = snode.get('supertype_uri')
+        return data
+        
