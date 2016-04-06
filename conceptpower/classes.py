@@ -1,5 +1,6 @@
-import requests
+import requests,json
 import xml.etree.ElementTree as ET
+from requests.auth import HTTPBasicAuth
 
 class Conceptpower:
     """
@@ -42,7 +43,7 @@ class Conceptpower:
         query : str
             Search term.
         pos : str
-            (default: 'Noun') Part of speach: Noun, Verb, etc.
+            (default: 'Noun') Part of speech: Noun, Verb, etc.
             
         Returns
         -------
@@ -157,4 +158,60 @@ class Conceptpower:
                 data['supertype_id'] = snode.get('supertype_id')
                 data['supertype_uri'] = snode.get('supertype_uri')
         return data
-        
+
+    def create(self,user,password,required_concept_data,**kwargs):
+        """
+        Adds a concept to the conceptlist by using rest api
+
+        Parameters
+        -----------
+        user: str
+             userId of the person who wants to add concept
+        password: str
+                 password of the person who wants to add concept
+        required_values: dict
+                        required keys
+                        key: "word"
+                                name of the word
+                        key: "pos"
+                                part of speech of the word
+                        key: "conceptlist"
+                                name of the concept list it belongs to,
+                        key: "description"
+                                description of the word
+                        key: "types"
+                                types of the word in the mentioned order
+
+                        For example:
+                        required_concept_data = {"word":"kitty","pos":"noun","conceptlist":"mylist",
+                                                 "description":"soft kitten","types":"LivingBeing"}
+
+        kwargs: kwargs
+                storing additional attributes passed
+
+        :return boolean: whether the concept has been succesfully added or not
+        """
+
+        #checking whether all required attributes are present in required_concept_data
+        required_attrs = ["word","pos","conceptlist","description","types"]
+
+        for i in range(0,required_attrs):
+            if required_attrs[i] not in required_concept_data:
+                raise ValueError('all required attributes are not passed into method')
+                return
+
+        auth = HTTPBasicAuth(user,password)
+        rest_url =  'http://chps.asu.edu/conceptpower/rest/concept/add'
+
+        concept_data = required_concept_data
+
+        #storing the additional attributes
+        for key in kwargs:
+            concept_data[key] = kwargs[key]
+
+        r = requests.post(url = rest_url, data = json.dumps(concept_data) ,  auth = auth)
+
+        if r.status_code == requests.codes.ok:
+            return True
+
+        return False
