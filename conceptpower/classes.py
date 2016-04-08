@@ -1,5 +1,7 @@
-import requests
+import requests,json
 import xml.etree.ElementTree as ET
+from requests.auth import HTTPBasicAuth
+
 
 class Conceptpower:
     """
@@ -42,7 +44,7 @@ class Conceptpower:
         query : str
             Search term.
         pos : str
-            (default: 'Noun') Part of speach: Noun, Verb, etc.
+            (default: 'Noun') Part of speech: Noun, Verb, etc.
             
         Returns
         -------
@@ -157,4 +159,59 @@ class Conceptpower:
                 data['supertype_id'] = snode.get('supertype_id')
                 data['supertype_uri'] = snode.get('supertype_uri')
         return data
-        
+
+    def create(self, user, password, word, pos, conceptlist, description, concepttype,
+               synonym_ids, equal_uris, similar_uris):
+        """
+        Adds a concept to the conceptlist by using rest api.
+
+        Parameters
+        -----------
+        user : str
+            UserId of the person who wants to add concept.
+        password : str
+            Password of the person who wants to add concept.
+        word : str
+            Name of the concept.
+        pos : str
+            Part of speech of the concept.
+        conceptlist : str
+            Name of the conceptlist concept belongs to.
+        description : str
+            Description of the concept.
+        type : str
+            Type of the concept.
+        synonymids : list
+            Ids of synonyms for the new concept.
+        equal_uris : list
+            URIs of concepts that are equal to the new concept.
+        similar_uris : list
+            URIs of concepts that are similar to the new concept.
+
+        Returns
+        -------
+        data : dict
+            When the concept has been successfully added, data is returned.
+        """
+
+        auth = HTTPBasicAuth(user,password)
+        rest_url = "{0}concept/add".format(self.endpoint)
+
+        concept_data = {
+            "word": word,
+            "pos": pos,
+            "conceptlist": conceptlist,
+            "description": description,
+            "types": concepttype,
+            "synonymids": synonym_ids,
+            "equals": equal_uris,
+            "similar": similar_uris
+        }
+
+        r = requests.post(url=rest_url, data=json.dumps(concept_data), auth=auth)
+
+        if r.status_code != requests.codes.ok:
+            raise RuntimeError(r.status_code, r.text)
+
+        # Returned data after successful response
+        return r.json()
