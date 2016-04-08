@@ -5,9 +5,9 @@ AUTHOR = 'E. Peirson, Digital Innovation Group @ ASU'
 MAINTAINER = 'Erick Peirson'
 MAINTAINER_EMAIL = 'erick [dot] peirson [at] asu [dot] edu'
 DESCRIPTION = ('A very simple library for querying a Conceptpower REST API.')
-LICENSE = 'GNU GPL 3' 
+LICENSE = 'GNU GPL 3'
 URL = 'https://github.com/erickpeirson/Conceptpower-API'
-VERSION = '1.0'
+VERSION = '1.2'
 
 PACKAGES = [ 'conceptpower',]
 
