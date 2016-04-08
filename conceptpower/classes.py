@@ -160,43 +160,38 @@ class Conceptpower:
                 data['supertype_uri'] = snode.get('supertype_uri')
         return data
 
-    def create(self, user, password, word, pos, conceptlist, description, type, synonym_ids, equal_uris, similar_uris):
+    def create(self, user, password, word, pos, conceptlist, description, concepttype,
+               synonym_ids, equal_uris, similar_uris):
         """
-        Adds a concept to the conceptlist by using rest api
+        Adds a concept to the conceptlist by using rest api.
 
         Parameters
         -----------
         user : str
-             userId of the person who wants to add concept
+            UserId of the person who wants to add concept.
         password : str
-                 password of the person who wants to add concept
+            Password of the person who wants to add concept.
         word : str
-             name of the word
+            Name of the concept.
         pos : str
-            part of speech of the word
+            Part of speech of the concept.
         conceptlist : str
-                    name of the concept list it belongs to
+            Name of the conceptlist concept belongs to.
         description : str
-                    description of the word
+            Description of the concept.
         type : str
-             type of the word
-
+            Type of the concept.
         synonymids : list
-                   ids of synonyms for the new concept
-
+            Ids of synonyms for the new concept.
         equal_uris : list
-                   URIs of concepts that are equal to the new concept
-
+            URIs of concepts that are equal to the new concept.
         similar_uris : list
-                     URIs of concepts that are similar to the new concepts
-
-        kwargs: kwargs
-                storing additional attributes passed
+            URIs of concepts that are similar to the new concept.
 
         Returns
         -------
         data : dict
-             when the concept has been successfully added, data is returned
+            When the concept has been successfully added, data is returned.
         """
 
         auth = HTTPBasicAuth(user,password)
@@ -207,7 +202,7 @@ class Conceptpower:
             "pos": pos,
             "conceptlist": conceptlist,
             "description": description,
-            "types": type,
+            "types": concepttype,
             "synonymids": synonym_ids,
             "equals": equal_uris,
             "similar": similar_uris
@@ -219,5 +214,4 @@ class Conceptpower:
             raise RuntimeError(r.status_code, r.text)
 
         # Returned data after successful response
-        data = r.json()
-        return data
+        return r.json()
