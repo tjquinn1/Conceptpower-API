@@ -160,8 +160,8 @@ class Conceptpower:
                 data['supertype_uri'] = snode.get('supertype_uri')
         return data
 
-    def create(self, user, password, word, pos, conceptlist, description, concepttype,
-               synonym_ids, equal_uris, similar_uris):
+    def create(self, user, password, label, pos, conceptlist, description, concepttype,
+               synonym_ids=[], equal_uris=[], similar_uris=[]):
         """
         Adds a concept to the conceptlist by using rest api.
 
@@ -171,7 +171,7 @@ class Conceptpower:
             UserId of the person who wants to add concept.
         password : str
             Password of the person who wants to add concept.
-        word : str
+        label : str
             Name of the concept.
         pos : str
             Part of speech of the concept.
