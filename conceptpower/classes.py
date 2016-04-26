@@ -198,7 +198,7 @@ class Conceptpower:
         rest_url = "{0}concept/add".format(self.endpoint)
 
         concept_data = {
-            "word": word,
+            "word": label,
             "pos": pos,
             "conceptlist": conceptlist,
             "description": description,
