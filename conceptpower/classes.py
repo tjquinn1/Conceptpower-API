@@ -210,6 +210,7 @@ class Conceptpower:
 
         r = requests.post(url=rest_url, data=json.dumps(concept_data), auth=auth)
 
+
         if r.status_code != requests.codes.ok:
             raise RuntimeError(r.status_code, r.text)
 
