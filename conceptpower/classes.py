@@ -165,6 +165,8 @@ class Conceptpower:
         """
         Adds a concept to the conceptlist by using rest api.
 
+        refer to documentation at "http://diging.github.io/conceptpower/doc/rest_add_concepts.html"
+
         Parameters
         -----------
         user : str
@@ -179,7 +181,7 @@ class Conceptpower:
             Name of the conceptlist concept belongs to.
         description : str
             Description of the concept.
-        type : str
+        concepttype : str
             Type of the concept.
         synonymids : list
             Ids of synonyms for the new concept.
@@ -202,7 +204,7 @@ class Conceptpower:
             "pos": pos,
             "conceptlist": conceptlist,
             "description": description,
-            "types": concepttype,
+            "type": concepttype,
             "synonymids": synonym_ids,
             "equals": equal_uris,
             "similar": similar_uris
