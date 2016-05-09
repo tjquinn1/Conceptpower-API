@@ -181,7 +181,7 @@ class Conceptpower:
             Name of the conceptlist concept belongs to.
         description : str
             Description of the concept.
-        type : str
+        type : concepttype
             Type of the concept.
         synonymids : list
             Ids of synonyms for the new concept.
