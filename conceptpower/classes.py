@@ -80,9 +80,13 @@ class Conceptpower:
         """
         
         url = "{0}ConceptLookup/{1}/{2}".format(self.endpoint, query, pos)
+        #print type(requests.get(url).content)
         root = ET.fromstring(requests.get(url).content)
+        #print type(root)
+        #print "{0}conceptEntry".format(self.namespace)
         conceptEntries = root.findall("{0}conceptEntry".format(self.namespace))
-        
+        #print conceptEntries
+
         results = []
         for conceptEntry in conceptEntries:
             datum = {}
@@ -90,7 +94,8 @@ class Conceptpower:
                 datum[node.tag.replace(self.namespace, '')] = node.text
                 if node.tag == '{0}type'.format(self.namespace):
                     datum['type_id'] = node.get('type_id')
-                    datum['type_uri'] = node.get('type_uri')                
+                    datum['type_uri'] = node.get('type_uri')
+            #print len(datum)
             results.append(datum)
         return results
 
@@ -217,3 +222,11 @@ class Conceptpower:
 
         # Returned data after successful response
         return r.json()
+
+
+with open('search_sample', 'r') as myfile:
+    data=myfile.read().replace('\n', '')
+
+print data
+#conceptpower = Conceptpower()
+#conceptpower.search('Bradshaw')
