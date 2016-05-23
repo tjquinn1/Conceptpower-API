@@ -154,14 +154,18 @@ class Conceptpower:
         
         url = "{0}Type?id={1}".format(self.endpoint, uri)
         root = ET.fromstring(requests.get(url).content)
-        conceptEntry = root.findall("{0}type_entry".format(self.namespace))[0]
+        conceptEntries = root.findall("{0}type_entry".format(self.namespace))
         data = {}
 
-        for snode in conceptEntry:
-            data[snode.tag.replace(self.namespace, '')] = snode.text
-            if snode.tag == '{0}supertype'.format(self.namespace):
-                data['supertype_id'] = snode.get('supertype_id')
-                data['supertype_uri'] = snode.get('supertype_uri')
+        if len(conceptEntries) > 0:
+            conceptEntry = conceptEntries[0]
+
+            for snode in conceptEntry:
+                data[snode.tag.replace(self.namespace, '')] = snode.text
+                if snode.tag == '{0}supertype'.format(self.namespace):
+                    data['supertype_id'] = snode.get('supertype_id')
+                    data['supertype_uri'] = snode.get('supertype_uri')
+
         return data
 
     def create(self, user, password, label, pos, conceptlist, description, concepttype,
@@ -221,3 +225,4 @@ class Conceptpower:
 
         # Returned data after successful response
         return r.json()
+
