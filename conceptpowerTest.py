@@ -12,26 +12,58 @@ import conceptpower
 class TestConceptpower(unittest.TestCase):
 
 
-    """
-    testing the "search" method when there is no concept for
-    the lemma we are searching
-    """
+
     @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_search)
     def test_search_no_concepts(self,mock_search):
+        """
+        testing the "search" method when there is no concept for
+        the lemma we are searching
+        """
+
         conceptPower = conceptpower.Conceptpower()
         val = conceptPower.search('Bradshaw', 0)
         self.assertIsInstance(val, list)
         self.assertEqual(len(val), 0)
 
 
-    """
-    testing the "search" method when there are concepts for
-    the lemma we are searching
-    """
     @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_search)
     def test_search(self,mock_search):
+        """
+        testing the "search" method when there are concepts for
+        the lemma we are searching
+        """
+
         conceptPower = conceptpower.Conceptpower()
         val = conceptPower.search('Bradshaw', 1)
         self.assertIsInstance(val, list)
         self.assertEqual(len(val), 1)
         self.assertEqual(len(val[0]),15)
+
+
+    @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_get)
+    def test_get_no_concept(self,mock_get):
+        """
+        testing the "get" method when there is no concept for
+        the Concept URI we are searching
+        :param mock_get:
+        :return:
+        """
+
+        conceptPower = conceptpower.Conceptpower()
+        val = conceptPower.get('http://www.digitalhps.org/concepts/abcdefg')
+        self.assertIsInstance(val,dict)
+        self.assertEqual(len(val),0)
+
+    @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_get)
+    def test_get(self,mock_get):
+        """
+        testing the "get" method when there is no concept for
+        the Concept URI we are searching
+        :param mock_get:
+        :return:
+        """
+
+        conceptPower = conceptpower.Conceptpower()
+        val = conceptPower.get('http://www.digitalhps.org/concepts/CON536b243d-3c71-4a5c-ab79-3c7f12765b3f')
+        self.assertIsInstance(val,dict)
+        self.assertEqual(len(val),15)

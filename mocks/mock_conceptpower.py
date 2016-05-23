@@ -17,23 +17,26 @@ sample_data = '<conceptpowerReply xmlns:digitalHPS="http://www.digitalhps.org/">
               '</digitalHPS:type><digitalHPS:deleted>false</digitalHPS:deleted><digitalHPS:wordnet_id>' \
               '</digitalHPS:wordnet_id></digitalHPS:conceptEntry></conceptpowerReply>'
 
+empty_data = '<conceptpowerReply xmlns:digitalHPS="http://www.digitalhps.org/"></conceptpowerReply>'
+
 class MockResponse:
 
-    def __init__(self, xml_data, status_code, content):
-            self.xml = xml_data
+    def __init__(self, status_code, content):
             self.status_code = status_code
             self.content = content
 
-    def xml(self):
-            return self.xml
-
-
 def mocked_requests_search(*args, **kwargs):
 
-     empty_data = '<conceptpowerReply xmlns:digitalHPS="http://www.digitalhps.org/"></conceptpowerReply>'
+    if args[0][-1] == '0':
+        return MockResponse(200, empty_data)
+    else:
+        return MockResponse(200, sample_data)
 
-     if args[0][-1] == '0':
-        return MockResponse('', 200, empty_data)
-     else:
-        return MockResponse('', 200, sample_data)
+def mocked_requests_get(*args, **kwargs):
+
+    if args[0] == 'http://chps.asu.edu/conceptpower/rest/Concept?id=http://www.digitalhps.org/concepts/abcdefg':
+        return MockResponse(200, empty_data)
+    else:
+        return MockResponse(200, sample_data)
+
 
