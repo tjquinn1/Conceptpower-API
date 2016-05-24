@@ -35,7 +35,7 @@ class MockResponse:
 
 def mocked_requests_search(*args, **kwargs):
 
-    if args[0][-1] == '0':
+    if args[0] == 'http://chps.asu.edu/conceptpower/rest/ConceptLookup/abcdef/Noun':
         return MockResponse(200, empty_data)
     else:
         return MockResponse(200, sample_data)

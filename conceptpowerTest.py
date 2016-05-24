@@ -21,7 +21,7 @@ class TestConceptpower(unittest.TestCase):
         """
 
         conceptPower = conceptpower.Conceptpower()
-        val = conceptPower.search('Bradshaw', 0)
+        val = conceptPower.search('abcdef')
         self.assertIsInstance(val, list)
         self.assertEqual(len(val), 0)
 
@@ -34,7 +34,7 @@ class TestConceptpower(unittest.TestCase):
         """
 
         conceptPower = conceptpower.Conceptpower()
-        val = conceptPower.search('Bradshaw', 1)
+        val = conceptPower.search('Bradshaw')
         self.assertIsInstance(val, list)
         self.assertEqual(len(val), 1)
         self.assertEqual(len(val[0]),15)
