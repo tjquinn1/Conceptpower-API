@@ -3,7 +3,7 @@ __author__ = 'diging_yogi'
 import unittest
 
 from requests.auth import HTTPBasicAuth
-from httmock import with_httmock
+#from httmock import with_httmock
 import mock
 import mocks.mock_conceptpower
 import conceptpower
@@ -25,12 +25,24 @@ class TestConceptpower(unittest.TestCase):
         self.assertIsInstance(val, list)
         self.assertEqual(len(val), 0)
 
+    @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_search)
+    def test_search_no_type(self,mock_search):
+        """
+        testing the "search" method when there are concepts for
+        the lemma and there is no type tag for those concepts
+        """
+
+        conceptPower = conceptpower.Conceptpower()
+        val = conceptPower.search('notypetag')
+        self.assertIsInstance(val, list)
+        self.assertEqual(len(val), 1)
+        self.assertEqual(len(val[0]),12)
 
     @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_search)
     def test_search(self,mock_search):
         """
         testing the "search" method when there are concepts for
-        the lemma we are searching
+        the lemma we are searching with type tag present
         """
 
         conceptPower = conceptpower.Conceptpower()
@@ -55,10 +67,24 @@ class TestConceptpower(unittest.TestCase):
         self.assertEqual(len(val),0)
 
     @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_get)
+    def test_get_no_type(self,mock_get):
+        """
+        testing the "get" method when there is concept for
+        the Concept URI we are searching with no type tag
+        :param mock_get:
+        :return:
+        """
+
+        conceptPower = conceptpower.Conceptpower()
+        val = conceptPower.get('http://www.digitalhps.org/concepts/notype')
+        self.assertIsInstance(val,dict)
+        self.assertEqual(len(val),12)
+
+    @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_get)
     def test_get(self,mock_get):
         """
-        testing the "get" method when there is no concept for
-        the Concept URI we are searching
+        testing the "get" method when there is concept for
+        the Concept URI we are searching with type tag
         :param mock_get:
         :return:
         """
