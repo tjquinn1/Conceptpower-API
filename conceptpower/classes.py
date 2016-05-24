@@ -82,7 +82,7 @@ class Conceptpower:
         url = "{0}ConceptLookup/{1}/{2}".format(self.endpoint, query, pos)
         root = ET.fromstring(requests.get(url).content)
         conceptEntries = root.findall("{0}conceptEntry".format(self.namespace))
-        
+
         results = []
         for conceptEntry in conceptEntries:
             datum = {}
@@ -90,7 +90,7 @@ class Conceptpower:
                 datum[node.tag.replace(self.namespace, '')] = node.text
                 if node.tag == '{0}type'.format(self.namespace):
                     datum['type_id'] = node.get('type_id')
-                    datum['type_uri'] = node.get('type_uri')                
+                    datum['type_uri'] = node.get('type_uri')
             results.append(datum)
         return results
 
@@ -123,14 +123,18 @@ class Conceptpower:
 
         url = "{0}Concept?id={1}".format(self.endpoint, uri)
         root = ET.fromstring(requests.get(url).content)
-        conceptEntry = root.findall("{0}conceptEntry".format(self.namespace))[0]
         data = {}
+        conceptEntries = root.findall("{0}conceptEntry".format(self.namespace))
 
-        for snode in conceptEntry:
-            data[snode.tag.replace(self.namespace, '')] = snode.text
-            if snode.tag == '{0}type'.format(self.namespace):
-                data['type_id'] = snode.get('type_id')
-                data['type_uri'] = snode.get('type_uri')
+        if len(conceptEntries) > 0:
+            conceptEntry = conceptEntries[0]
+
+            for snode in conceptEntry:
+                data[snode.tag.replace(self.namespace, '')] = snode.text
+                if snode.tag == '{0}type'.format(self.namespace):
+                    data['type_id'] = snode.get('type_id')
+                    data['type_uri'] = snode.get('type_uri')
+
         return data
         
     def get_type(self, uri):
@@ -150,14 +154,18 @@ class Conceptpower:
         
         url = "{0}Type?id={1}".format(self.endpoint, uri)
         root = ET.fromstring(requests.get(url).content)
-        conceptEntry = root.findall("{0}type_entry".format(self.namespace))[0]
+        conceptEntries = root.findall("{0}type_entry".format(self.namespace))
         data = {}
 
-        for snode in conceptEntry:
-            data[snode.tag.replace(self.namespace, '')] = snode.text
-            if snode.tag == '{0}supertype'.format(self.namespace):
-                data['supertype_id'] = snode.get('supertype_id')
-                data['supertype_uri'] = snode.get('supertype_uri')
+        if len(conceptEntries) > 0:
+            conceptEntry = conceptEntries[0]
+
+            for snode in conceptEntry:
+                data[snode.tag.replace(self.namespace, '')] = snode.text
+                if snode.tag == '{0}supertype'.format(self.namespace):
+                    data['supertype_id'] = snode.get('supertype_id')
+                    data['supertype_uri'] = snode.get('supertype_uri')
+
         return data
 
     def create(self, user, password, label, pos, conceptlist, description, concepttype,
@@ -218,3 +226,4 @@ class Conceptpower:
 
         # Returned data after successful response
         return r.json()
+
