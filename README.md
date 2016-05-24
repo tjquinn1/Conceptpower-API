@@ -1,7 +1,7 @@
-Conceptpower API
+Conceptpower API    ![](https://travis-ci.org/diging/Conceptpower-API.svg?branch=master)
 ================
 A very simple library for querying a [Conceptpower](http://conceptpower.sourceforge.net/)
-REST API
+REST API.
 
 Cite as: [![DOI](https://zenodo.org/badge/5124/erickpeirson/Conceptpower-API.png)](http://dx.doi.org/10.5281/zenodo.12395)
 
