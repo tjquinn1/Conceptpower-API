@@ -67,3 +67,32 @@ class TestConceptpower(unittest.TestCase):
         val = conceptPower.get('http://www.digitalhps.org/concepts/CON536b243d-3c71-4a5c-ab79-3c7f12765b3f')
         self.assertIsInstance(val,dict)
         self.assertEqual(len(val),15)
+
+    @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_get_type)
+    def test_get_type_no_concept(self,mock_get_type):
+        """
+        testing the "get_type" method when there is no concept for
+        the Concept URI we are searching
+        :param mock_get_type:
+        :return:
+        """
+
+        conceptPower = conceptpower.Conceptpower()
+        val = conceptPower.get_type('http://www.digitalhps.org/types/TYPE_abadf')
+        self.assertIsInstance(val,dict)
+        self.assertEqual(len(val),0)
+
+    @mock.patch('requests.get', side_effect=mocks.mock_conceptpower.mocked_requests_get_type)
+    def test_get_type_concept(self,mock_get_type):
+        """
+        testing the "get_type" method when there is concept for
+        the Concept URI we are searching
+        :param mock_get_type:
+        :return:
+        """
+
+        conceptPower = conceptpower.Conceptpower()
+        val = conceptPower.get_type('ttp://www.digitalhps.org/types/TYPE_986a7cc9-c0c1-4720-b344-853f08c136ab')
+        self.assertIsInstance(val,dict)
+        self.assertEqual(len(val),5)
+

@@ -19,6 +19,14 @@ sample_data = '<conceptpowerReply xmlns:digitalHPS="http://www.digitalhps.org/">
 
 empty_data = '<conceptpowerReply xmlns:digitalHPS="http://www.digitalhps.org/"></conceptpowerReply>'
 
+sample_type_data = '<conceptpowerReply xmlns:digitalHPS="http://www.digitalhps.org/"><digitalHPS:type_entry>' \
+                   '<digitalHPS:type type_id="986a7cc9-c0c1-4720-b344-853f08c136ab"' \
+                   ' type_uri="http://www.digitalhps.org/types/TYPE_986a7cc9-c0c1-4720-b344-853f08c136ab">E21 Person' \
+                   '</digitalHPS:type><digitalHPS:description>Nelson Mandela</digitalHPS:description>' \
+                   '<digitalHPS:creator_id>jdamerow</digitalHPS:creator_id><digitalHPS:matches>' \
+                   'http://purl.org/NET/cidoc-crm/core#E21_Person</digitalHPS:matches><digitalHPS:modified_by>' \
+                   '</digitalHPS:modified_by></digitalHPS:type_entry></conceptpowerReply>'
+
 class MockResponse:
 
     def __init__(self, status_code, content):
@@ -39,4 +47,10 @@ def mocked_requests_get(*args, **kwargs):
     else:
         return MockResponse(200, sample_data)
 
+def mocked_requests_get_type(*args, **kwargs):
+
+    if args[0] == 'http://chps.asu.edu/conceptpower/rest/Type?id=http://www.digitalhps.org/types/TYPE_abadf':
+        return MockResponse(200, empty_data)
+    else:
+        return MockResponse(200, sample_type_data)
 
