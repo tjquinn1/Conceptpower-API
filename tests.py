@@ -96,3 +96,5 @@ class TestConceptpower(unittest.TestCase):
         self.assertIsInstance(val,dict)
         self.assertEqual(len(val),5)
 
+if __name__ == '__main__':
+    unittest.main()
