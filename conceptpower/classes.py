@@ -7,10 +7,10 @@ class Conceptpower:
     """
     Provides simple access to the `Conceptpower
     <http://conceptpower.sourceforge.net/>`_ API.
-    
-    Set :prop:`.endpoint` and :prop:`.namespace` when subclassing 
+
+    Set :prop:`.endpoint` and :prop:`.namespace` when subclassing
     :class:`.Conceptpower` or by passing them as ``kwargs`` to the constructor.
-    
+
     Parameters
     ----------
     kwargs : kwargs
@@ -23,33 +23,33 @@ class Conceptpower:
     # Default behavior is to leave these to the constructor.
     endpoint = None
     namespace = None
-    
+
     def __init__(self, **kwargs):
         # Give first priority to the class definition, if endpoint or namespace
         #  are defined (and not None).
         if self.endpoint is None:
             self.endpoint = kwargs.get(
                 "endpoint", "http://chps.asu.edu/conceptpower/rest/")
-        
+
         if self.namespace is None:
             self.namespace = kwargs.get(
                "namespace", "{http://www.digitalhps.org/}")
-    
+
     def search (self, query, pos='Noun'):
         """
         Search for a concept by lemma.
-        
+
         Parameters
         ----------
         query : str
             Search term.
         pos : str
             (default: 'Noun') Part of speech: Noun, Verb, etc.
-            
+
         Returns
         -------
         results : list
-        
+
         Example
         -------
         >>> pprint (cp.search("Bradshaw"))
@@ -78,7 +78,7 @@ class Conceptpower:
           'pos': 'noun',
           'type': None}]
         """
-        
+
         url = "{0}ConceptLookup/{1}/{2}".format(self.endpoint, query, pos)
         root = ET.fromstring(requests.get(url).content)
         conceptEntries = root.findall("{0}conceptEntry".format(self.namespace))
@@ -94,20 +94,20 @@ class Conceptpower:
             results.append(datum)
         return results
 
-    def get (self, uri):
+    def get(self, uri):
         """
         Retrieve information (by ID or URI) about a concept.
-        
+
         Parameters
         ----------
         uri : str
-            The full Conceptpower URI, or an ID, as string. For example: 
+            The full Conceptpower URI, or an ID, as string. For example:
             http://www.digitalhps.org/CON7971a85a-49e1-424d-84e6-697262bd2510
-            
+
         Returns
         -------
         data : dict
-        
+
         Example
         -------
         >>> pprint (cp.get("http://www.digitalhps.org/concepts/CON536b243d-3c71-4a5c-ab79-3c7f12765b3f"))
@@ -130,28 +130,31 @@ class Conceptpower:
             conceptEntry = conceptEntries[0]
 
             for snode in conceptEntry:
-                data[snode.tag.replace(self.namespace, '')] = snode.text
+                value = snode.text
                 if snode.tag == '{0}type'.format(self.namespace):
                     data['type_id'] = snode.get('type_id')
                     data['type_uri'] = snode.get('type_uri')
+                elif snode.tag == '{0}equal_to'.format(self.namespace):
+                    value = value.split(',')
+                data[snode.tag.replace(self.namespace, '')] = value
 
         return data
-        
+
     def get_type(self, uri):
         """
         Retrieve information (by ID or URI) about a type.
-        
+
         Parameters
         ----------
         uri : str
-            The full Conceptpower URI, or an ID, as string. For example: 
+            The full Conceptpower URI, or an ID, as string. For example:
             http://www.digitalhps.org/types/TYPE_986a7cc9-c0c1-4720-b344-853f08c136ab
-            
+
         Returns
         -------
         data : dict
         """
-        
+
         url = "{0}Type?id={1}".format(self.endpoint, uri)
         root = ET.fromstring(requests.get(url).content)
         conceptEntries = root.findall("{0}type_entry".format(self.namespace))
@@ -168,12 +171,13 @@ class Conceptpower:
 
         return data
 
-    def create(self, user, password, label, pos, conceptlist, description, concepttype,
-               synonym_ids=[], equal_uris=[], similar_uris=[]):
+    def create(self, user, password, label, pos, conceptlist, description,
+               concepttype, synonym_ids=[], equal_uris=[], similar_uris=[]):
         """
-        Adds a concept to the conceptlist by using rest api.
+        Add a new concept.
 
-        refer to documentation at "http://diging.github.io/conceptpower/doc/rest_add_concepts.html"
+        Refer to documentation at
+        http://diging.github.io/conceptpower/doc/rest_add_concepts.html.
 
         Parameters
         -----------
@@ -226,4 +230,3 @@ class Conceptpower:
 
         # Returned data after successful response
         return r.json()
-

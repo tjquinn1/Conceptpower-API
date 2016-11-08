@@ -7,7 +7,7 @@ MAINTAINER_EMAIL = 'erick [dot] peirson [at] asu [dot] edu'
 DESCRIPTION = ('A very simple library for querying a Conceptpower REST API.')
 LICENSE = 'GNU GPL 3'
 URL = 'https://github.com/erickpeirson/Conceptpower-API'
-VERSION = '1.5'
+VERSION = '1.6'
 
 PACKAGES = [ 'conceptpower',]
 
