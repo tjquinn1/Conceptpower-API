@@ -1,6 +1,7 @@
 import requests,json
 import xml.etree.ElementTree as ET
 from requests.auth import HTTPBasicAuth
+import urllib
 
 
 class Conceptpower:
@@ -35,7 +36,7 @@ class Conceptpower:
             self.namespace = kwargs.get(
                "namespace", "{http://www.digitalhps.org/}")
 
-    def search (self, query, pos=None):
+    def search (self, query=None, **kwargs):
         """
         Search for a concept by lemma.
 
@@ -81,9 +82,12 @@ class Conceptpower:
 
         # TODO: this really should employ proper encoding. And pos should be
         #  optional. What a mess.
-        url = "{0}ConceptSearch?word={1}".format(self.endpoint, query)
-        if pos:
-            url += "&pos={0}".format(pos.lower())
+        url = "%sConceptSearch?" % self.endpoint
+        if query:
+            url += "word=%s" % query
+        if kwargs:
+            url += urllib.urlencode(kwargs)
+
         root = ET.fromstring(requests.get(url).content)
         conceptEntries = root.findall("{0}conceptEntry".format(self.namespace))
 
