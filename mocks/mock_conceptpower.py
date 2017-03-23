@@ -49,9 +49,9 @@ class MockResponse:
 
 def mocked_requests_search(*args, **kwargs):
 
-    if args[0] == 'http://chps.asu.edu/conceptpower/rest/ConceptLookup/abcdef/Noun':
+    if args[0] == 'http://chps.asu.edu/conceptpower/rest/ConceptSearch?word=abcdef&pos=noun':
         return MockResponse(200, empty_data)
-    elif args[0] == 'http://chps.asu.edu/conceptpower/rest/ConceptLookup/notypetag/Noun':
+    elif args[0] == 'http://chps.asu.edu/conceptpower/rest/ConceptSearch?word=notypetag&pos=noun':
         return MockResponse(200, sample_no_type_data)
     else:
         return MockResponse(200, sample_data)
@@ -71,4 +71,3 @@ def mocked_requests_get_type(*args, **kwargs):
         return MockResponse(200, empty_data)
     else:
         return MockResponse(200, sample_type_data)
-

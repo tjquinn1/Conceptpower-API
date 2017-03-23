@@ -35,7 +35,7 @@ class Conceptpower:
             self.namespace = kwargs.get(
                "namespace", "{http://www.digitalhps.org/}")
 
-    def search (self, query, pos='Noun'):
+    def search (self, query, pos='noun'):
         """
         Search for a concept by lemma.
 
@@ -44,7 +44,7 @@ class Conceptpower:
         query : str
             Search term.
         pos : str
-            (default: 'Noun') Part of speech: Noun, Verb, etc.
+            (default: 'noun') Part of speech: noun, verb, etc.
 
         Returns
         -------
@@ -79,7 +79,9 @@ class Conceptpower:
           'type': None}]
         """
 
-        url = "{0}ConceptLookup/{1}/{2}".format(self.endpoint, query, pos)
+        # TODO: this really should employ proper encoding. And pos should be
+        #  optional. What a mess.
+        url = "{0}ConceptSearch?word={1}&pos={2}".format(self.endpoint, query, pos.lower())
         root = ET.fromstring(requests.get(url).content)
         conceptEntries = root.findall("{0}conceptEntry".format(self.namespace))
 
