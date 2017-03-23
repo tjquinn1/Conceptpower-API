@@ -49,9 +49,9 @@ class MockResponse:
 
 def mocked_requests_search(*args, **kwargs):
 
-    if args[0] == 'http://chps.asu.edu/conceptpower/rest/ConceptSearch?word=abcdef&pos=noun':
+    if args[0].startswith('http://chps.asu.edu/conceptpower/rest/ConceptSearch?word=abcdef'):
         return MockResponse(200, empty_data)
-    elif args[0] == 'http://chps.asu.edu/conceptpower/rest/ConceptSearch?word=notypetag&pos=noun':
+    elif args[0].startswith('http://chps.asu.edu/conceptpower/rest/ConceptSearch?word=notypetag'):
         return MockResponse(200, sample_no_type_data)
     else:
         return MockResponse(200, sample_data)
