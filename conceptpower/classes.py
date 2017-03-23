@@ -135,7 +135,8 @@ class Conceptpower:
                     data['type_id'] = snode.get('type_id')
                     data['type_uri'] = snode.get('type_uri')
                 elif snode.tag == '{0}equal_to'.format(self.namespace):
-                    value = value.split(',')
+                    if value:
+                        value = value.split(',')
                 data[snode.tag.replace(self.namespace, '')] = value
 
         return data
