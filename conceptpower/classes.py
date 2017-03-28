@@ -36,7 +36,7 @@ class Conceptpower:
             self.namespace = kwargs.get(
                "namespace", "{http://www.digitalhps.org/}")
 
-    def search (self, query=None, **kwargs):
+    def search(self, query=None, **kwargs):
         """
         Search for a concept by lemma.
 
@@ -91,6 +91,11 @@ class Conceptpower:
         root = ET.fromstring(requests.get(url).content)
         conceptEntries = root.findall("{0}conceptEntry".format(self.namespace))
 
+        _rename = {
+            'lemma': 'word',
+            'id': 'uri'
+        }
+
         results = []
         for conceptEntry in conceptEntries:
             datum = {}
@@ -99,7 +104,8 @@ class Conceptpower:
                 if node.tag == '{0}type'.format(self.namespace):
                     datum['type_id'] = node.get('type_id')
                     datum['type_uri'] = node.get('type_uri')
-            results.append(datum)
+
+            results.append({_rename.get(k, k): self._clean(v) for k, v in datum.iteritems()})
         return results
 
     def get(self, uri):
@@ -146,8 +152,11 @@ class Conceptpower:
                     if value:
                         value = value.split(',')
                 data[snode.tag.replace(self.namespace, '')] = value
-
-        return data
+        _rename = {
+            'lemma': 'word',
+            'id': 'uri'
+        }
+        return {_rename.get(k, k): self._clean(v) for k, v in data.iteritems()}
 
     def get_type(self, uri):
         """
@@ -178,7 +187,7 @@ class Conceptpower:
                     data['supertype_id'] = snode.get('supertype_id')
                     data['supertype_uri'] = snode.get('supertype_uri')
 
-        return data
+        return {k: self._clean(v) for k, v in data.iteritems()}
 
     def create(self, user, password, label, pos, conceptlist, description,
                concepttype, synonym_ids=[], equal_uris=[], similar_uris=[]):
@@ -237,5 +246,12 @@ class Conceptpower:
         if r.status_code != requests.codes.ok:
             raise RuntimeError(r.status_code, r.text)
 
+        raw = r.json()
+
         # Returned data after successful response
-        return r.json()
+        return {k: self._clean(v) for k, v in raw.iteritems()}
+
+    def _clean(self, value):
+        if isinstance(value, str) or isinstance(value, unicode):
+            return value.strip()
+        return value
