@@ -236,8 +236,8 @@ class Conceptpower:
             "description": description,
             "type": concepttype,
             "synonymids": synonym_ids,
-            "equals": equal_uris,
-            "similar": similar_uris
+            "equal_to": ",".join(str(equal_uris_element) for equal_uris_element in equal_uris),
+            "similar": ",".join(str(similar_uris_element) for similar_uris_element in similar_uris)
         }
 
         r = requests.post(url=rest_url, data=json.dumps(concept_data), auth=auth)
