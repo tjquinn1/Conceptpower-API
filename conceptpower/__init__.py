@@ -1,4 +1,4 @@
-from classes import *
+from .classes import *
 
 def search(query, pos='Noun', **kwargs):
     """

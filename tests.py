@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 __author__ = 'diging_yogi'
 
 import unittest
@@ -5,8 +6,8 @@ import unittest
 from requests.auth import HTTPBasicAuth
 #from httmock import with_httmock
 import mock
-import mocks.mock_conceptpower
-import conceptpower
+from . import mocks.mock_conceptpower
+from . import conceptpower
 
 
 class TestConceptpower(unittest.TestCase):
