@@ -6,7 +6,7 @@ import unittest
 from requests.auth import HTTPBasicAuth
 #from httmock import with_httmock
 import mock
-from . import mocks.mock_conceptpower
+from .mocks import mock_conceptpower
 from . import conceptpower
 
 

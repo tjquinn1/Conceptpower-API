@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-DISTNAME = 'conceptpower-python3-api'
+DISTNAME = 'conceptpower-api'
 AUTHOR = 'E. Peirson, Digital Innovation Group @ ASU'
 AUTHOR_EMAIL = '"E. Peirson" <erick.peirson@asu.edu>'
 MAINTAINER = 'T. Quinn Digital Innovation Group @ ASU'
