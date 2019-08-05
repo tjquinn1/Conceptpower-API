@@ -1,13 +1,13 @@
 from distutils.core import setup
 
-DISTNAME = 'conceptpower-api'
+DISTNAME = 'conceptpower-py3-api'
 AUTHOR = 'E. Peirson, Digital Innovation Group @ ASU'
 AUTHOR_EMAIL = '"E. Peirson" <erick.peirson@asu.edu>'
 MAINTAINER = 'T. Quinn Digital Innovation Group @ ASU'
 MAINTAINER_EMAIL = '"T. Quinn" <tjquinn1@asu.edu>'
 DESCRIPTION = ('A very simple library for querying a Conceptpower REST API.')
 LICENSE = 'GNU GPL 3'
-URL = 'https://github.com/erickpeirson/Conceptpower-API'
+URL = 'https://github.com/tjquinn1/Conceptpower-API'
 VERSION = '1.10'
 
 PACKAGES = [ 'conceptpower',]
